@@ -123,7 +123,7 @@ if ( params.help == true || params.ref == false || params.input == false ){
 
 	// Run AnnotSV (optional)
 	if (params.annotsv) {
-		annotsv(survivor_merge.out.mergedVCF, params.annotsv, params.minSVsize)}
+		annotsv(survivor_merge.out.mergedVCF, params.annotsv)}
 	}}
 
 workflow.onComplete {
