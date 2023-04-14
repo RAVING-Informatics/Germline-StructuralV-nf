@@ -1,7 +1,7 @@
 # To-do
 - [x] add minSV size for annotSV
 - [x] set annotSV to 'both' annotation (or could use split)
-- [ ] set manta to `--bam` rather than `--normalBam`
+- [x] set manta to `--bam` rather than `--normalBam`
 - [ ] run manta as a cohort rather than individually
 - [ ] merge all VCFs into one cohort VCF before annotSV   
 

@@ -1,5 +1,5 @@
 #!/bin/bash -l 
-#SBATCH --job-name=fix_annotsv
+#SBATCH --job-name=fix_manta
 #SBATCH --account=pawsey0848
 #SBATCH --partition=work
 #SBATCH --ntasks=1
