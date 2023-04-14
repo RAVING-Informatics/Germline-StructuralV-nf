@@ -18,10 +18,11 @@ process annotsv {
 		-SVinputFile ${sampleID}_merged.vcf \
 		-annotationsDir ${params.annotsv} \
 		-bedtools bedtools -bcftools bcftools \
-		-annotationMode full \
+		-annotationMode both \
 		-genomeBuild GRCh38 \
 		-includeCI 1 \
 		-overwrite 1 \
-		-outputFile ${sampleID}_AnnotSV.tsv
+		-outputFile ${sampleID}_AnnotSV.tsv \
+		-SVminSize ${params.minSVsize}
 	"""
 }
