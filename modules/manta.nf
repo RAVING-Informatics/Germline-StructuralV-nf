@@ -25,7 +25,7 @@ process manta {
 	"""
 	# configure manta SV analysis workflow
 	configManta.py \
-		--normalBam ${bam} \
+		--bam ${bam} \
 		--referenceFasta ${params.ref} \
 		--runDir manta \
 		$intervals
