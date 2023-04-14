@@ -66,6 +66,8 @@ Optional Arguments:
 
 	--annotsv		Full path to the directory housing the prepared
 				Annotations_human directory for AnnotSV. 
+	
+	--minSVsize		Minimum SV size for AnnotSV to annotate (default = 50bp).
 
 """.stripIndent()
 }
@@ -121,7 +123,7 @@ if ( params.help == true || params.ref == false || params.input == false ){
 
 	// Run AnnotSV (optional)
 	if (params.annotsv) {
-		annotsv(survivor_merge.out.mergedVCF, params.annotsv)}
+		annotsv(survivor_merge.out.mergedVCF, params.annotsv, params.minSVsize)}
 	}}
 
 workflow.onComplete {
