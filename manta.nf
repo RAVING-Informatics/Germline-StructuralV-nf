@@ -92,24 +92,21 @@ if ( params.help == true || params.ref == false || params.input == false ){
 		.splitCsv(header: true, sep:"\t")
 	input = input_split
 		.map { row -> tuple(row.sampleID, file(row.bam), file(row.bai)) }
-//		.groupTuple()
-	bams = input.toList({it[1]})
-	input.view()
-	input_split.view()
+	bams = input.collect({it[1]})
 	bams.view()
-
+/*
 	// Call SVs with Manta  
 	manta(bams, params.batchName, params.ref, params.ref+'.fai')
-/*
-#	// Rehead manta vcf for merging 
-#	rehead_manta(manta.out.manta_diploid_convert, manta.out.manta_diploid_convert_tbi)
 
-#	// Call SVs with Smoove
-#	smoove(input, params.ref, params.ref+'.fai')
+	// Rehead manta vcf for merging 
+	rehead_manta(manta.out.manta_diploid_convert, manta.out.manta_diploid_convert_tbi)
+*/
+	// Call SVs with Smoove
+	smoove(bams, params.batchName, params.ref, params.ref+'.fai')
 
 	// Rehead smoove vcf for merging  
-#	rehead_smoove(smoove.out.smoove_geno)
-
+	// rehead_smoove(smoove.out.smoove_geno)
+/*
 	// Run TIDDIT sv
 #	tiddit_sv(input, params.ref, params.ref+'.fai')
   

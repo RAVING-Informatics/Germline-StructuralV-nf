@@ -1,11 +1,11 @@
 // run manta structural variant detection and convert inversions
 process manta {
-	debug false
+	debug true
 	publishDir "${params.outDir}/${batchName}", mode: 'copy'
 	container "${params.mulled__container}"
 
 	input:
-	path bams
+	val(bams)
 	val(batchName)
 	path(ref)
 	path(ref_fai)
@@ -25,6 +25,7 @@ process manta {
 	def intervals = params.intervals ? "--callRegions $params.intervals" : ''
 	def input_files = bams.collect{"--bam ${it}"}.join(' ')
 	"""
+	echo $input_files
 	# configure manta SV analysis workflow
 	configManta.py \
 		${input_files} \
