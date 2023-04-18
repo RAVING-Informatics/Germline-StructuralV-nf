@@ -20,4 +20,4 @@ module load nextflow/22.04.3
 conda activate graphviz
 
 #Run the pipeline
-nextflow run /software/projects/pawsey0848/sv/Germline-StructuralV-nf/main.nf --input /scratch/pawsey0848/sv/batch1/samples.tsv --ref /software/projects/pawsey0848/sv/references/hg38_masked/Homo_sapiens_assembly38_masked.fasta --intervals /software/projects/pawsey0848/sv/references/hg38_regions.bed.gz -config /software/projects/pawsey0848/sv/Germline-StructuralV-nf/config/setonix.config --annotsv /software/projects/pawsey0848/sv/references/ --minSVsize 39 --batchName test_manta
+nextflow run /software/projects/pawsey0848/sv/Germline-StructuralV-nf/manta.nf --input /scratch/pawsey0848/sv/batch1/samples.tsv --ref /software/projects/pawsey0848/sv/references/hg38_masked/Homo_sapiens_assembly38_masked.fasta -config /software/projects/pawsey0848/sv/Germline-StructuralV-nf/config/setonix.config  --batchName test_manta
