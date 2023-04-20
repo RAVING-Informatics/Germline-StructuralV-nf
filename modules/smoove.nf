@@ -52,7 +52,7 @@ process rehead_smoove {
 	# create new header for merged vcf
 	printf "${batchName}_smoove\n" > ${batchName}_rehead_smoove.txt
 
-	# replace batchName with caller_sample for merging 	
+	# replace batchName with caller_sample for merging
 	bcftools reheader \
 		${batchName}-smoove.genotyped.vcf.gz \
 		-s ${batchName}_rehead_smoove.txt \

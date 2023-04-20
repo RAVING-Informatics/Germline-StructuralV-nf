@@ -56,7 +56,7 @@ process rehead_tiddit {
 	# create new header for merged vcf
 	printf "${sampleID}_tiddit\n" > ${sampleID}_rehead_tiddit.txt
 
-	# replace sampleID with caller_sample for merging 	
+	# replace sampleID with caller_sample for merging
 	bcftools reheader \
 		Tiddit_${sampleID}_PASSsv.vcf.gz \
 		-s ${sampleID}_rehead_tiddit.txt \
@@ -67,5 +67,25 @@ process rehead_tiddit {
 	
 	#clean up
 	rm -r ${sampleID}_rehead_tiddit.txt
+	"""
+}
+
+// Merge all TIDDIT SVs
+process merge_tiddit {
+	debug false
+	publishDir "${params.outDir}/tidditsv", mode: 'copy'
+	container "${params.svdb__container}"
+	
+	input:
+	path(tiddit_VCF)
+
+	output:
+	tuple val(params.batchName), path("tiddit_pass_merged.vcf")		, emit: tiddit_merged_vcf
+
+	script:
+	def input_vcfs = tiddit_VCF.collect{"${it}"}.join(' ')
+	"""
+	echo ${input_vcfs}
+	svdb --merge --vcf ${input_vcfs} --bnd_distance 300 --overlap 0.8 > tiddit_pass_merged.vcf
 	"""
 }

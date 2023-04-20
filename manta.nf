@@ -9,6 +9,7 @@ include { manta             }   from './modules/manta'
 include { rehead_manta      }   from './modules/manta'
 include { tiddit_sv         }   from './modules/tiddit_sv'
 include { rehead_tiddit     }   from './modules/tiddit_sv'
+include { merge_tiddit	    }	from './modules/tiddit_sv'
 include { tiddit_cov        }   from './modules/tiddit_cov'
 include { survivor_merge    }   from './modules/survivor_merge'
 include { survivor_summary  }   from './modules/survivor_summary'
@@ -93,44 +94,47 @@ if ( params.help == true || params.ref == false || params.input == false ){
 	input = input_split
 		.map { row -> tuple(row.sampleID, file(row.bam), file(row.bai)) }
 	bams = input.collect({it[1]})
-	bams.view()
-/*
+	ids = input.collect({it[0]})
+
 	// Call SVs with Manta  
 	manta(bams, params.batchName, params.ref, params.ref+'.fai')
 
 	// Rehead manta vcf for merging 
 	rehead_manta(manta.out.manta_diploid_convert, manta.out.manta_diploid_convert_tbi)
-*/
+
 	// Call SVs with Smoove
 	smoove(bams, params.batchName, params.ref, params.ref+'.fai')
 
 	// Rehead smoove vcf for merging  
-	// rehead_smoove(smoove.out.smoove_geno)
-/*
+	rehead_smoove(smoove.out.smoove_geno)
+
 	// Run TIDDIT sv
-#	tiddit_sv(input, params.ref, params.ref+'.fai')
+	tiddit_sv(input, params.ref, params.ref+'.fai')
   
 	// Rehead TIDDIT vcf for merging
-#	rehead_tiddit(tiddit_sv.out.tiddit_vcf)
+	rehead_tiddit(tiddit_sv.out.tiddit_vcf)
+
+	// Merge all TIDDIT VCFs
+	merge_tiddit(rehead_tiddit.out.tiddit_VCF.collect({it[1]}))
 
 	// Run TIDDIT cov 
-#	tiddit_cov(input, params.ref, params.ref+'.fai')
+	tiddit_cov(input, params.ref, params.ref+'.fai')
 
 	// Collect VCFs for merging
-#	mergeFile = rehead_tiddit.out.tiddit_VCF
-#		.concat(rehead_smoove.out.smoove_VCF, rehead_manta.out.manta_VCF)
-#		.groupTuple() 
+	mergeFile = merge_tiddit.out.tiddit_merged_vcf
+		.concat(rehead_smoove.out.smoove_VCF, rehead_manta.out.manta_VCF)
+		.groupTuple() 
 
 	// Run SURVIVOR merge
-#	survivor_merge(mergeFile)
+	survivor_merge(mergeFile)
 
 	// Run SURVIVOR summary
-#	survivor_summary(survivor_merge.out.mergedVCF)
+	survivor_summary(survivor_merge.out.mergedVCF)
 
 	// Run AnnotSV (optional)
-#	if (params.annotsv) {
-#		annotsv(survivor_merge.out.mergedVCF, params.annotsv)}
-*/
+	if (params.annotsv) {
+		annotsv(survivor_merge.out.mergedVCF, params.annotsv)}
+
 	}}
 
 workflow.onComplete {
