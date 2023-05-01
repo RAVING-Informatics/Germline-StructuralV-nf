@@ -1,16 +1,21 @@
 // run annotSV for variant annotation (human, mouse only)
 process annotsv {
 	debug false
-	publishDir "${params.outDir}/${sampleID}/annotsv", mode: 'copy'
+	publishDir "${params.outDir}/${params.batchName}/annotsv", mode: 'copy'
 	container "${params.annotsv__container}"
 
 	input:
+<<<<<<< Updated upstream
 	tuple val(sampleID), path(mergedVCF)
 	path annotsvDir
 	val annotsvMode
+=======
+	tuple val(batchName), path(mergedVCF)
+	path("${params.annotsv}")
+>>>>>>> Stashed changes
 
 	output:
-	tuple val(sampleID), path("*_AnnotSV")
+	tuple val(batchName), path("*_AnnotSV")
 
 	script: 
 	// Apply annotation mode flag to command
@@ -31,15 +36,20 @@ process annotsv {
 	def extraArgs = params.extraAnnotsvFlags ?: ''
 	"""
 	AnnotSV \
+<<<<<<< Updated upstream
 		-SVinputFile ${sampleID}_merged.vcf \
 		-annotationsDir ${params.annotsvDir} \
+=======
+		-SVinputFile ${batchName}_merged.vcf \
+		-annotationsDir ${params.annotsv} \
+>>>>>>> Stashed changes
 		-bedtools bedtools -bcftools bcftools \
 <<<<<<< HEAD
 		-annotationMode both \
 		-genomeBuild GRCh38 \
 		-includeCI 1 \
 		-overwrite 1 \
-		-outputFile ${sampleID}_AnnotSV.tsv \
+		-outputFile ${batchName}_AnnotSV.tsv \
 		-SVminSize ${params.minSVsize}
 =======
 		-annotationMode ${mode} \
