@@ -80,7 +80,7 @@ process merge_tiddit {
 	path(tiddit_VCF)
 
 	output:
-	tuple val(params.batchName), path("tiddit_pass_merged.vcf")		, emit: tiddit_merged_vcf
+	path("tiddit_pass_merged.vcf")		, emit: tiddit_merged_vcf
 
 	script:
 	def input_vcfs = tiddit_VCF.collect{"${it}"}.join(' ')

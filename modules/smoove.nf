@@ -42,15 +42,17 @@ process rehead_smoove {
 	container "${params.bcftools__container}" 
 
 	input:
+	val(ids)
 	tuple val(batchName), path(smoove_geno)
 		
 	output:
-	tuple val(batchName), path("Smoove_${batchName}.vcf")	, emit: smoove_VCF	
+	path("Smoove_${batchName}.vcf")	, emit: smoove_VCF	
 		
 	script:
 	"""
 	# create new header for merged vcf
-	printf "${batchName}_smoove\n" > ${batchName}_rehead_smoove.txt
+	idlist = [ids.collect{"${it}"}.join('_smoove\n')]
+	printf "${idlist}" > ${batchName}_rehead_smoove.txt
 
 	# replace batchName with caller_sample for merging
 	bcftools reheader \

@@ -1,6 +1,6 @@
 // run manta structural variant detection and convert inversions
 process manta {
-	debug true
+	debug false
 	publishDir "${params.outDir}/${batchName}", mode: 'copy'
 	container "${params.mulled__container}"
 
@@ -63,21 +63,23 @@ process manta {
 
 // rehead manta SV vcf for merging 
 process rehead_manta {
-	debug false 
+	debug true
 	publishDir "${params.outDir}/${batchName}/manta", mode: 'copy'
 	container "${params.bcftools__container}"
 
 	input:
+	val(ids)
 	tuple val(batchName), path(manta_diploid_convert)
 	tuple val(batchName), path(manta_diploid_convert_tbi)
 
 	output:
-	tuple val(batchName), path("Manta_*.vcf")	, emit: manta_VCF
+	path("Manta_*.vcf")	, emit: manta_VCF
 		
 	script:
 	"""
 	# create new header for merged vcf
-	printf "${batchName}_manta\n" > ${batchName}_rehead_manta.txt
+	def idlist = [ids.collect{"${it}"}.join('_manta\n')]
+	printf "${idlist}" > ${batchName}_rehead_manta.txt
 
 	# replace batchName with caller_sample for merging
 	bcftools reheader \
